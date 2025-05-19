@@ -25,9 +25,9 @@ const connectDatabase = async () => {
         console.error('MongoDB connection failed: ', error.message);
         process.exit(1);
     }
-}
+};
 
-connectDatabase()
+connectDatabase();
 
 // routes will go here
 
