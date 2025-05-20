@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const SavedRecipeSchema = new mongoose.Schema({
-    owner: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
@@ -17,8 +17,9 @@ const SavedRecipeSchema = new mongoose.Schema({
     },
 }, {
     timestamps: true, 
-    unique: ['user', 'recipe'], 
 });
+
+SavedRecipeSchema.index({ user: 1, recipe: 1 }, { unique: true }); // to ensure unique user recipe pairs (user cannot save same recipe more than once)
 
 const SavedRecipe = mongoose.model('SavedRecipe', SavedRecipeSchema);
 module.exports = SavedRecipe;

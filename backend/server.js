@@ -14,8 +14,10 @@ app.use(cors()) // middleware for enabling CORS (cross-original resource sharing
 // ROUTES
 const authRoutes = require('./routes/authRoutes'); // imports authRoutes
 const recipeRoutes = require('./routes/recipeRoutes');
+const savedRecipeRoutes = require('./routes/savedRecipeRoutes');
 app.use('/api/auth', authRoutes); // mount the authRoutes under the '/api/auth' path
-app.use('/api', recipeRoutes);
+app.use('/api/recipes', recipeRoutes); // mount the recipeRoutes under the '/api/recipes' path
+app.use('/api/saved-recipes', savedRecipeRoutes); // mount the savedRecipeRoutes under the '/api/saved-recipes' path
 
 // DATABASE CONNECTION
 const mongoose = require('mongoose');
