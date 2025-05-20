@@ -32,7 +32,6 @@ const ReviewSchema = new mongoose.Schema({
     },
 }, {
     timestamps: true,
-    unique: ['user', 'recipe'] // so that a user can only review a recipe once
 });
 
 const Review = mongoose.model('Review', ReviewSchema);
