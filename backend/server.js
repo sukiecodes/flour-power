@@ -11,6 +11,10 @@ app.use(express.json()); // middleware to parse incoming JSON data in request bo
 const cors = require('cors');
 app.use(cors()) // middleware for enabling CORS (cross-original resource sharing)
 
+// ROUTES
+const authRoutes = require('./routes/authRoutes'); // imports authRoutes
+app.use('/api/auth', authRoutes); // mount the authRoutes under the '/api/auth' path
+
 // DATABASE CONNECTION
 const mongoose = require('mongoose');
 const mongoUri = process.env.MONGODB_URI;
@@ -28,8 +32,6 @@ const connectDatabase = async () => {
 };
 
 connectDatabase();
-
-// routes will go here
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
