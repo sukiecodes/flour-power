@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
 
+// register user function
 const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -35,6 +37,38 @@ const registerUser = async (req, res) => {
     }
 };
 
+// login user function
+const loginUser = async(req, res) => {
+    const { usernameOrEmail, password } = req.body;
+
+    try {
+        // finding the user by username or email
+        const user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+
+        if (!user) {
+            return res.status(401).json({ message: 'invalid credentials' }); // 401 unauthorized
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ message: 'incorrect password' });
+        }
+        
+        // creates a payload object for the JWT, typically comes from mongodb _id
+        const payload = {
+            userId: user._id,
+        };
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); // token expires in one hour
+
+        res.status(200).json({ message: 'login successful', token});
+    } catch(error) {
+        console.error('error during login: ', error);
+        res.status(500).json({ message: 'login failed', error: error.message });
+    }
+};
+
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser,
 };
