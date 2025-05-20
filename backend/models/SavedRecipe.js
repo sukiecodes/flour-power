@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const SavedRecipeSchema = new mongoose.Schema({
     owner: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
     recipe: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Recipe',
         required: true,
     },

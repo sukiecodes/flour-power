@@ -27,7 +27,7 @@ const RecipeSchema = new mongoose.Schema({
         trim: true
     },
     owner: { // references the user that created the recipe
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
