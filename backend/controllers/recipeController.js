@@ -1,4 +1,5 @@
 const Recipe = require('../models/Recipe');
+const mongoose = require('mongoose');
 
 // function that adds a recipe
 const addRecipe = async (req, res) => {
@@ -55,15 +56,16 @@ const updateRecipe = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
+    // change string id to object id 
+    let objectIdRecipeId;
     try {
-        // change string id to object id 
-        let objectIdRecipeId;
-        try {
-            objectIdRecipeId = new mongoose.Types.ObjectId(id);
-        } catch (error) {
-            return res.status(400).json({ message: 'invalid recipeId format' });
-        }
+        objectIdRecipeId = new mongoose.Types.ObjectId(id);
+    } catch (error) {
+        console.error('error while updating recipe: ', error);
+        return res.status(400).json({ message: 'invalid recipeId format' });
+    }
 
+    try {
         // find and update the recipe, ensuring ownership
         const updatedRecipe = await Recipe.findOneAndUpdate(
             { _id: objectIdRecipeId, user: userId },
@@ -102,9 +104,33 @@ const deleteRecipe = async (req, res) => {
     }
 };
 
+// function to get all recipes for public viewing 
+const getAllRecipes = async (req, res) => { 
+    try { 
+        const recipes = await Recipe.find({});
+        res.status(200).json({ recipes }); 
+    } catch (error) { 
+        res.status(500).json({ message: error.message }); } 
+};
+
+// function to find a recipe by its id
+const getRecipeById = async (req, res) => { 
+    try { 
+        const recipe = await Recipe.findById(req.params.id);
+        if (!recipe) {
+            res.status(404).json({ message: 'recipe not found' }); 
+        }
+        res.status(200).json({ recipe });
+    } catch (error) {
+        res.status(500).json({ message: error.message }); 
+    } 
+};
+
 module.exports = {
     addRecipe,
     getRecipesOfUser,
     updateRecipe,
     deleteRecipe,
+    getAllRecipes,
+    getRecipeById
 };

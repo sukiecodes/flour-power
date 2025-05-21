@@ -1,9 +1,11 @@
 const Review = require('../models/Review');
 const Recipe = require('../models/Recipe');
+const mongoose = require('mongoose');
 
 // add review function
 const addReview = async (req, res) => {
-    const { recipeId, rating, comment } = req.body 
+    const { recipeId } = req.params;
+    const { rating, comment } = req.body 
     const userId = req.user.userId; // from auth middleware 
 
     try {
@@ -54,10 +56,10 @@ const getReviewsForRecipe = async (req, res) => {
 
     let objectIdRecipeId;
     try {
-        objectIdRecipeId = mongoose.Types.ObjectId(recipeId); // trying to convert string id to object id
+        objectIdRecipeId = new mongoose.Types.ObjectId(recipeId); // trying to convert string id to object id
     } catch (error) {
-        console.error('Invalid recipeId format:', recipeId);
-        return res.status(400).json({ message: 'Invalid recipeId format' });
+        console.error('invalid recipeId format:', recipeId);
+        return res.status(400).json({ message: 'invalid recipeId format' });
     }
 
     try {
