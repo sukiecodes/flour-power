@@ -7,7 +7,7 @@ import { RecipeFormData } from '@/lib/types';
 
 // page where user can create a new recipe, in theory will direct them their my-recipes page afterward
 // uses RecipeForm from components
-export function CreateRecipePage() {
+export default function CreateRecipePage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
